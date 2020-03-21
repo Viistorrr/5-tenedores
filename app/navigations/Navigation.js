@@ -8,6 +8,10 @@ import TopListsScreenStacks from "./TopListsStacks";
 import SearchScreenStacks from "./SearchStacks";
 import AccountScreenStacks from "./AccountStacks";
 
+/**
+ * React Navigation 4 se hace todo por configuracion
+ * Aprender una version y manejar porque se actualiza muy rapido
+ */
 const NavigationStacks = createBottomTabNavigator(
   {
     //Nuestros Stacks de Navegacion
@@ -69,7 +73,7 @@ const NavigationStacks = createBottomTabNavigator(
     }
   },
   {
-    initialRouteName: "Restaurants",
+    initialRouteName: "Account",
     order: ["Restaurants", "TopLists", "Search", "Account"],
     tabBarOptions: {
       inactiveTintColor: "#646464",
