@@ -2,28 +2,51 @@ import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Input, Icon, Button } from "react-native-elements";
 import { validateEmail } from "../../utils/Validation";
+import * as firebase from "firebase";
+import Loading from "../Loading";
+import { withNavigation } from "react-navigation";
 
-export default function RegisterForm() {
+function RegisterForm(props) {
+  const { toastRef, navigation } = props;
   const [hidePassword, setHidePassword] = useState(true);
   const [hideRepeatPassword, sethideRepeatPassword] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
+  const [isVisibleLoading, setIsVisibleLoading] = useState(false);
 
-  const register = () => {
+  const register = async () => {
+    setIsVisibleLoading(true);
     if (!email || !password || !repeatPassword) {
-      console.log("todos los campos son oblicatorios");
+      toastRef.current.show("Todos los campos son obligatorios");
     } else {
       if (!validateEmail(email)) {
-        console.log("El email no es correcto");
+        toastRef.current.show("El email no es correcto");
       } else {
         if (password !== repeatPassword) {
-          console.log("Las constrasenbas no son iguales");
+          toastRef.current.show("Las constraseñas no son iguales");
         } else {
-          console.log("Registro Correcto...");
+          await firebase
+            .auth()
+            .createUserWithEmailAndPassword(email, password)
+            .then(() => {
+              //toastRef.current.show("Usuario creado correctamente");
+              navigation.navigate("MyAccount");
+            })
+            .catch(() => {
+              if (password.length <= 5)
+                toastRef.current.show(
+                  "La contraseña debe tener al menos 6 caracteres"
+                );
+              else
+                toastRef.current.show(
+                  "Error al crear la cuenta. Intentelo mas tarde"
+                );
+            });
         }
       }
     }
+    setIsVisibleLoading(false);
   };
   return (
     <View style={styles.formContainer}>
@@ -75,9 +98,12 @@ export default function RegisterForm() {
         buttonStyle={styles.btnRegister}
         onPress={register}
       />
+      <Loading text="Creando Cuenta" isVisible={isVisibleLoading} />
     </View>
   );
 }
+
+export default withNavigation(RegisterForm);
 
 const styles = StyleSheet.create({
   formContainer: {
