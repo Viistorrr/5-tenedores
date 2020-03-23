@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 73751,
-  "expoServerNgrokUrl": "https://vu-6ss.anonymous.5-tenedores.exp.direct",
-  "packagerNgrokUrl": "https://packager.vu-6ss.anonymous.5-tenedores.exp.direct",
-  "ngrokPid": 73771
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null
 }
