@@ -1,17 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Input, Icon, Button } from "react-native-elements";
+import { validateEmail } from "../../utils/Validation";
 
 export default function RegisterForm() {
+  const [hidePassword, setHidePassword] = useState(true);
+  const [hideRepeatPassword, sethideRepeatPassword] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [repeatPassword, setRepeatPassword] = useState("");
+
   const register = () => {
-    console.log("Usuario Registrado");
+    if (!email || !password || !repeatPassword) {
+      console.log("todos los campos son oblicatorios");
+    } else {
+      if (!validateEmail(email)) {
+        console.log("El email no es correcto");
+      } else {
+        if (password !== repeatPassword) {
+          console.log("Las constrasenbas no son iguales");
+        } else {
+          console.log("Registro Correcto...");
+        }
+      }
+    }
   };
   return (
     <View style={styles.formContainer}>
       <Input
         placeholder="Correo electronico"
         containerStyle={styles.inputForm}
-        onChange={() => console.log("Email actualizado")}
+        onChange={e => setEmail(e.nativeEvent.text)}
         rightIcon={
           <Icon
             type="material-community"
@@ -23,28 +42,30 @@ export default function RegisterForm() {
       <Input
         placeholder="Contraseña"
         password={true}
-        secureTextEntry={true}
+        secureTextEntry={hidePassword}
         containerStyle={styles.inputForm}
-        onChange={() => console.log("Contrasena cambiando")}
+        onChange={e => setPassword(e.nativeEvent.text)}
         rightIcon={
           <Icon
             type="material-community"
-            name="eye-outline"
+            name={hidePassword ? "eye-outline" : "eye-off-outline"}
             iconStyle={styles.iconRight}
+            onPress={() => setHidePassword(!hidePassword)}
           />
         }
       />
       <Input
         placeholder="Repetir Contraseña"
         password={true}
-        secureTextEntry={true}
+        secureTextEntry={hideRepeatPassword}
         containerStyle={styles.inputForm}
-        onChange={() => console.log("Reperit contrasena cambiando")}
+        onChange={e => setRepeatPassword(e.nativeEvent.text)}
         rightIcon={
           <Icon
             type="material-community"
-            name="eye-outline"
+            name={hideRepeatPassword ? "eye-outline" : "eye-off-outline"}
             iconStyle={styles.iconRight}
+            onPress={() => sethideRepeatPassword(!hideRepeatPassword)}
           />
         }
       />
