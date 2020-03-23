@@ -16,7 +16,7 @@ function RegisterForm(props) {
   const [isVisibleLoading, setIsVisibleLoading] = useState(false);
 
   const register = async () => {
-    setIsVisibleLoading(true);
+    setIsVisibleLoading(false);
     if (!email || !password || !repeatPassword) {
       toastRef.current.show("Todos los campos son obligatorios");
     } else {
