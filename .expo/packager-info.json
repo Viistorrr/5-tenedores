@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 46958,
+  "expoServerNgrokUrl": "https://bw-dhk.anonymous.5-tenedores.exp.direct",
+  "packagerNgrokUrl": "https://packager.bw-dhk.anonymous.5-tenedores.exp.direct",
+  "ngrokPid": 46971
 }
