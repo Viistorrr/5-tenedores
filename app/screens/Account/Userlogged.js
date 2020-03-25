@@ -21,7 +21,7 @@ export default function UserLogged() {
       setUserInfo(user.providerData[0]);
     })();
     setReloadData(false);
-  }, []); //Aqui se indican las vbles que s ejecutan
+  }, [reloadData]); //Aqui se indican las vbles que se ejecutan
   return (
     <View style={styles.viewUserInfo}>
       <InfoUser

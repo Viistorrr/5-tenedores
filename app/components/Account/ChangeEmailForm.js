@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { Input, Button } from "react-native-elements";
 import * as firebase from "firebase";
-import { isLoading } from "expo-font";
+import { reauthenticate } from "../../utils/Api";
 
 export default function ChangeEmailForm(props) {
-  const { email, setIsvisibleModal, setReloadData, toastRef } = props;
+  const { email, setIsVisibleModal, setReloadData, toastRef } = props;
   const [newEmail, setNewEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState({});
@@ -13,7 +13,33 @@ export default function ChangeEmailForm(props) {
   const [isLoading, setIsLoading] = useState(false);
 
   const updateEmail = () => {
-    console.log("Email actualizado");
+    setError({});
+
+    if (!newEmail || email === newEmail) {
+      setError({ email: "El email no puede ser igual o estar vacío" });
+    } else {
+      setIsLoading(true);
+      reauthenticate(password)
+        .then(() => {
+          firebase
+            .auth()
+            .currentUser.updateEmail(newEmail)
+            .then(() => {
+              setIsLoading(false);
+              setReloadData(true);
+              toastRef.current.show("Email actualizado correctamente");
+              setIsVisibleModal(false);
+            })
+            .catch(() => {
+              setError({ email: "Error al actualizar el email" });
+              setIsLoading(false);
+            });
+        })
+        .catch(() => {
+          setError({ password: "La contraseña no es correcta." });
+          setIsLoading(false);
+        });
+    }
   };
   return (
     <View>
