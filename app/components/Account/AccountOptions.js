@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { ListItem } from "react-native-elements";
 import Modal from "../Modal";
+import ChangeDisplayNameForm from "./ChangeDisplayNameForm";
+import ChangeEmailForm from "./ChangeEmailForm";
+import ChangePasswordForm from "./ChangePassowrdForm";
 
 export default function AccountOptions() {
   const [isVisibleModal, setIsVisibleModal] = useState(false);
+  const [renderComponent, setRenderComponent] = useState(null);
 
   const menuOptions = [
     {
@@ -14,10 +18,7 @@ export default function AccountOptions() {
       iconColorLeft: "#CCC",
       iconNameRight: "chevron-right",
       iconColorRight: "#CCC",
-      onPress: () => {
-        console.log("Change displayName");
-        selectedComponent(); //ejecuta la funcion
-      }
+      onPress: () => selectedComponent("displayName") //ejecuta la funcion
     },
     {
       title: "Cambiar Email",
@@ -26,9 +27,7 @@ export default function AccountOptions() {
       iconColorLeft: "#CCC",
       iconNameRight: "chevron-right",
       iconColorRight: "#CCC",
-      onPress: () => {
-        console.log("Change Email");
-      }
+      onPress: () => selectedComponent("email") //ejecuta la funcion
     },
     {
       title: "Cambiar Contraseña",
@@ -37,14 +36,27 @@ export default function AccountOptions() {
       iconColorLeft: "#CCC",
       iconNameRight: "chevron-right",
       iconColorRight: "#CCC",
-      onPress: () => {
-        console.log("Change Password");
-      }
+      onPress: () => selectedComponent("password") //ejecuta la funcion
     }
   ];
 
-  const selectedComponent = () => {
-    setIsVisibleModal(true);
+  const selectedComponent = key => {
+    switch (key) {
+      case "displayName":
+        setRenderComponent(<ChangeDisplayNameForm />);
+        setIsVisibleModal(true);
+        break;
+      case "email":
+        setRenderComponent(<ChangeEmailForm />);
+        setIsVisibleModal(true);
+        break;
+      case "password":
+        setRenderComponent(<ChangePasswordForm />);
+        setIsVisibleModal(true);
+        break;
+      default:
+        break;
+    }
   };
 
   return (
@@ -67,11 +79,11 @@ export default function AccountOptions() {
           containerStyle={styles.menuItems}
         />
       ))}
-      <Modal isVisible={isVisibleModal} setIsVisible={setIsVisibleModal}>
-        <View>
-          <Text>Texto desde la modal Overlay</Text>
-        </View>
-      </Modal>
+      {renderComponent && (
+        <Modal isVisible={isVisibleModal} setIsVisible={setIsVisibleModal}>
+          {renderComponent}
+        </Modal>
+      )}
     </View>
   );
 }
