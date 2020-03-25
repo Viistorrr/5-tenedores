@@ -6,7 +6,8 @@ import ChangeDisplayNameForm from "./ChangeDisplayNameForm";
 import ChangeEmailForm from "./ChangeEmailForm";
 import ChangePasswordForm from "./ChangePassowrdForm";
 
-export default function AccountOptions() {
+export default function AccountOptions(props) {
+  const { userInfo, setReloadData, toastRef } = props;
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [renderComponent, setRenderComponent] = useState(null);
 
@@ -43,11 +44,25 @@ export default function AccountOptions() {
   const selectedComponent = key => {
     switch (key) {
       case "displayName":
-        setRenderComponent(<ChangeDisplayNameForm />);
+        setRenderComponent(
+          <ChangeDisplayNameForm
+            displayName={userInfo.displayName}
+            setIsVisibleModal={setIsVisibleModal}
+            setReloadData={setReloadData}
+            toastRef={toastRef}
+          />
+        );
         setIsVisibleModal(true);
         break;
       case "email":
-        setRenderComponent(<ChangeEmailForm />);
+        setRenderComponent(
+          <ChangeEmailForm
+            email={userInfo.email}
+            setIsVisibleModal={setIsVisibleModal}
+            setReloadData={setReloadData}
+            toastRef={toastRef}
+          />
+        );
         setIsVisibleModal(true);
         break;
       case "password":
