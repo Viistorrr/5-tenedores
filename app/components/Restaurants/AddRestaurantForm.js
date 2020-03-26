@@ -49,6 +49,22 @@ function UploadImage(props) {
     }
   };
 
+  const removeImage = image => {
+    const arrayImages = imagesSelected;
+    Alert.alert("Eliminar imagen", "Estas seguro de eliminar la imagen?", [
+      {
+        text: "Cancel",
+        style: "cancel"
+      },
+      {
+        text: "Eliminar",
+        onPress: () => {
+          setImagesSelected(arrayImages.filter(imageUrl => imageUrl !== image));
+        }
+      }
+    ]);
+  };
+
   return (
     <View style={styles.viewImages}>
       {imagesSelected.length < 5 && (
@@ -64,9 +80,7 @@ function UploadImage(props) {
       {imagesSelected.map(imageRestaurant => (
         <Avatar
           key={imageRestaurant}
-          onPress={() => {
-            console.log("Eliminando imagen");
-          }}
+          onPress={() => removeImage(imageRestaurant)}
           style={styles.miniatureStyle}
           source={{ uri: imageRestaurant }}
         />
