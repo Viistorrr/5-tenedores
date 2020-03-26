@@ -9,10 +9,18 @@ const widthScreen = Dimensions.get("window").width;
 export default function AddRestaurantForm(props) {
   const { toastRef, setIsLoading, navigation } = props;
   const [imagesSelected, setImagesSelected] = useState([]); //sera un array de las imgs del restaurante
+  const [restaurantName, setRestaurantName] = useState("");
+  const [restaurantAddress, setRestaurantAddress] = useState("");
+  const [restaurantDescription, setRestaurantDescription] = useState("");
 
   return (
     <ScrollView>
       <ImageRestaurant imageRestaurant={imagesSelected[0]} />
+      <FormAdd
+        setRestaurantName={setRestaurantName}
+        setRestaurantAddress={setRestaurantAddress}
+        setRestaurantDescription={setRestaurantDescription}
+      />
       <UploadImage
         imagesSelected={imagesSelected}
         setImagesSelected={setImagesSelected}
@@ -21,6 +29,11 @@ export default function AddRestaurantForm(props) {
     </ScrollView>
   );
 }
+
+/**
+ *
+ * Es un formulario que se va a dividir por componentes
+ */
 
 function ImageRestaurant(props) {
   const { imageRestaurant } = props;
@@ -112,6 +125,41 @@ function UploadImage(props) {
   );
 }
 
+function FormAdd(props) {
+  const {
+    setRestaurantName,
+    setRestaurantAddress,
+    setRestaurantDescription
+  } = props;
+
+  return (
+    <View style={styles.viewForm}>
+      <Input
+        placeholder="Nombre del restaurante"
+        containerStyle={styles.input}
+        onChange={e => setRestaurantName(e.nativeEvent.text)}
+      />
+      <Input
+        placeholder="Dirección"
+        containerStyle={styles.input}
+        rightIcon={{
+          type: "material-community",
+          name: "google-maps",
+          color: "#c2c2c2",
+          onPress: () => console.log("Direccion actualizada desde el icono")
+        }}
+        onChange={e => setRestaurantAddress(e.nativeEvent.text)}
+      />
+      <Input
+        placeholder="Descripción del restaurante"
+        multiline={true}
+        inputContainerStyle={styles.textArea}
+        onChange={e => setRestaurantDescription(e.nativeEvent.text)}
+      />
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   viewPhoto: {
     alignItems: "center",
@@ -136,5 +184,18 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginRight: 10
+  },
+  viewForm: {
+    marginLeft: 10,
+    marginRight: 10
+  },
+  input: {
+    marginBottom: 10
+  },
+  textArea: {
+    height: 100,
+    width: "100%",
+    padding: 0,
+    margin: 0
   }
 });
