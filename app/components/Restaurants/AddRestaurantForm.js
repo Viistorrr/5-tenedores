@@ -59,7 +59,7 @@ function UploadImage(props) {
       {
         text: "Eliminar",
         onPress: () => {
-          setImagesSelected(arrayImages.filter(imageUrl => imageUrl !== image));
+          setImagesSelected(arrayImages.filter(imageUrl => imageUrl !== image)); //Muestra todas las imagenenes
         }
       }
     ]);
