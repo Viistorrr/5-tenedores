@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 
-import RestaurantsScreen from "../screens/Restaurants";
+import RestaurantsScreen from "../screens/Restaurants/Restaurants";
 import TopRestaurantsScreen from "../screens/TopRestaurants";
 import SearchRestaurantsScreen from "../screens/Search";
 import MyAccountScreen from "../screens/Account/MyAccount";

@@ -4,8 +4,8 @@
     <list default="true" id="6bc9e044-0991-432e-9a0f-bc3afd06dd75" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.expo/packager-info.json" beforeDir="false" afterPath="$PROJECT_DIR$/.expo/packager-info.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/navigations/AccountStacks.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/navigations/AccountStacks.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/screens/Account/UserGuest.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/screens/Account/UserGuest.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/navigations/Navigation.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/navigations/Navigation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/screens/Restaurants.js" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
