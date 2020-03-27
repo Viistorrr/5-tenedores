@@ -6,6 +6,12 @@ import * as ImagePicker from "expo-image-picker";
 import Modal from "../Modal";
 import MapView from "react-native-maps";
 import * as Location from "expo-location";
+import uuid from "uuid";
+
+import { firebaseApp } from "../../utils/FireBase";
+import firebase from "firebase/app";
+import "firebase/firestore";
+const db = firebase.firestore(firebaseApp);
 
 const widthScreen = Dimensions.get("window").width;
 
@@ -17,6 +23,46 @@ export default function AddRestaurantForm(props) {
   const [restaurantDescription, setRestaurantDescription] = useState("");
   const [isVisibleMap, setIsVisibleMap] = useState(false);
   const [locationRestaurant, setLocationRestaurant] = useState(null);
+
+  const addRestaurant = () => {
+    if (!restaurantName || !restaurantAddress || !restaurantDescription) {
+      toastRef.current.show(
+        "Todos los campos del formulario son obligatorios",
+        3000
+      );
+    } else if (imagesSelected.length === 0) {
+      toastRef.current.show(
+        "El restaurante debe tener al menos una foto",
+        3000
+      );
+    } else if (!locationRestaurant) {
+      toastRef.current.show(
+        "El restaurante debe tener la Localización del Mapa",
+        3000
+      );
+    } else {
+      //setIsloading(true); // No me funciono pero no quiero estancar para avanzar este modulo
+      uploadImageStorage(imagesSelected);
+    }
+  };
+
+  const uploadImageStorage = async imageArray => {
+    const imageBlob = [];
+    await Promise.all(
+      imageArray.map(async image => {
+        const response = await fetch(image);
+        const blob = await response.blob();
+        const ref = firebase
+          .storage()
+          .ref("restaurant-images")
+          .child(uuid());
+        await ref.put(blob).then(result => {
+          //imageBlob.push(result.log)
+          console.log(result);
+        });
+      })
+    );
+  };
 
   return (
     <ScrollView>
@@ -32,6 +78,11 @@ export default function AddRestaurantForm(props) {
         imagesSelected={imagesSelected}
         setImagesSelected={setImagesSelected}
         toastRef={toastRef}
+      />
+      <Button
+        title="Crear Restaurante"
+        onPress={addRestaurant}
+        buttonStyle={styles.btnAddRestaurant}
       />
       <Map
         isVisibleMap={isVisibleMap}
@@ -312,5 +363,9 @@ const styles = StyleSheet.create({
   },
   viewBtnCancel: {
     backgroundColor: "#A60D0D"
+  },
+  btnAddRestaurant: {
+    backgroundColor: "#00a680",
+    margin: 20
   }
 });
