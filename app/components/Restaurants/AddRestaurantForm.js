@@ -3,6 +3,9 @@ import { StyleSheet, View, ScrollView, Alert, Dimensions } from "react-native";
 import { Icon, Avatar, Image, Input, Button } from "react-native-elements";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
+import MapsView from "react-native-maps";
+import Modal from "../Modal";
+import MapView from "react-native-maps";
 
 const widthScreen = Dimensions.get("window").width;
 
@@ -12,6 +15,8 @@ export default function AddRestaurantForm(props) {
   const [restaurantName, setRestaurantName] = useState("");
   const [restaurantAddress, setRestaurantAddress] = useState("");
   const [restaurantDescription, setRestaurantDescription] = useState("");
+  const [isVisibleMap, setIsVisibleMap] = useState(false);
+  const [locationRestaurant, setLocationRestaurant] = useState(null);
 
   return (
     <ScrollView>
@@ -20,11 +25,18 @@ export default function AddRestaurantForm(props) {
         setRestaurantName={setRestaurantName}
         setRestaurantAddress={setRestaurantAddress}
         setRestaurantDescription={setRestaurantDescription}
+        setIsVisibleMap={setIsVisibleMap}
+        locationRestaurant={locationRestaurant}
       />
       <UploadImage
         imagesSelected={imagesSelected}
         setImagesSelected={setImagesSelected}
         toastRef={toastRef}
+      />
+      <Map
+        isVisibleMap={isVisibleMap}
+        setIsVisibleMap={setIsVisibleMap}
+        setLocationRestaurant={setLocationRestaurant}
       />
     </ScrollView>
   );
@@ -129,7 +141,9 @@ function FormAdd(props) {
   const {
     setRestaurantName,
     setRestaurantAddress,
-    setRestaurantDescription
+    setRestaurantDescription,
+    setIsVisibleMap,
+    locationRestaurant
   } = props;
 
   return (
@@ -145,8 +159,8 @@ function FormAdd(props) {
         rightIcon={{
           type: "material-community",
           name: "google-maps",
-          color: "#c2c2c2",
-          onPress: () => console.log("Direccion actualizada desde el icono")
+          color: locationRestaurant ? "#00a680" : "#c2c2c2",
+          onPress: () => setIsVisibleMap(true)
         }}
         onChange={e => setRestaurantAddress(e.nativeEvent.text)}
       />
@@ -157,6 +171,54 @@ function FormAdd(props) {
         onChange={e => setRestaurantDescription(e.nativeEvent.text)}
       />
     </View>
+  );
+}
+
+function Map(props) {
+  const {
+    isVisibleMap,
+    setIsVisibleMap,
+    setLocationRestaurant,
+    toastRef
+  } = props;
+
+  const [location, setLocation] = useState(null);
+
+  return (
+    <Modal isVisible={isVisibleMap} setIsVisible={setIsVisibleMap}>
+      <View>
+        {location && (
+          <MapView
+            style={styles.mapStyle}
+            initialRegion={location}
+            showsUserLocation={true}
+            onRegionChange={region => setLocation(region)}
+          >
+            <MapView.Marker
+              coordinate={{
+                latitude: location.latitude,
+                longitude: location.longitude
+              }}
+              draggable
+            />
+          </MapView>
+        )}
+        <View style={styles.viewMapBtn}>
+          <Button
+            title="Guardar Ubicación"
+            onPress={() => console.log("Ubicacion guardada")}
+            containerStyle={styles.viewMapBtnContainerSave}
+            buttonStyle={styles.viewMapBtnSave}
+          />
+          <Button
+            title="Cancelar Ubicación"
+            onPress={() => setIsVisibleMap(false)}
+            containerStyle={styles.viewMapBtnContainerCancel}
+            buttonStyle={styles.viewBtnCancel}
+          />
+        </View>
+      </View>
+    </Modal>
   );
 }
 
@@ -197,5 +259,26 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 0,
     margin: 0
+  },
+  mapStyle: {
+    width: "100%",
+    height: 550
+  },
+  viewMapBtn: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 10
+  },
+  viewMapBtnContainerSave: {
+    paddingRight: 5
+  },
+  viewMapBtnSave: {
+    backgroundColor: "#00a680"
+  },
+  viewMapBtnContainerCancel: {
+    paddingLeft: 5
+  },
+  viewBtnCancel: {
+    backgroundColor: "#A60D0D"
   }
 });
