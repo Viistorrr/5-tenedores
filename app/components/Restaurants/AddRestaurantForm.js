@@ -210,6 +210,12 @@ function Map(props) {
     })();
   }, []);
 
+  const confirmLocation = () => {
+    setLocationRestaurant(location);
+    toastRef.current.show("Localización guardada correctamente");
+    setIsVisibleMap(false);
+  };
+
   return (
     <Modal isVisible={isVisibleMap} setIsVisible={setIsVisibleMap}>
       <View>
@@ -232,7 +238,7 @@ function Map(props) {
         <View style={styles.viewMapBtn}>
           <Button
             title="Guardar Ubicación"
-            onPress={() => console.log("Ubicacion guardada")}
+            onPress={confirmLocation}
             containerStyle={styles.viewMapBtnContainerSave}
             buttonStyle={styles.viewMapBtnSave}
           />
