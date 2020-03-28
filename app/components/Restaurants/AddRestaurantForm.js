@@ -41,7 +41,7 @@ export default function AddRestaurantForm(props) {
         3000
       );
     } else {
-      //setIsloading(true); // No me funciono pero no quiero estancar para avanzar este modulo
+      setIsLoading(true);
       uploadImageStorage(imagesSelected);
     }
   };
@@ -255,7 +255,7 @@ function Map(props) {
           latitude: loc.coords.latitude,
           longitude: loc.coords.longitude,
           latitudeDelta: 0.001,
-          logitudeDelta: 0.001
+          longitudeDelta: 0.001
         });
       }
     })();
