@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "react-native-get-random-values";
 import { StyleSheet, View, ScrollView, Alert, Dimensions } from "react-native";
 import { Icon, Avatar, Image, Input, Button } from "react-native-elements";
 import * as Permissions from "expo-permissions";
@@ -6,7 +7,6 @@ import * as ImagePicker from "expo-image-picker";
 import Modal from "../Modal";
 import MapView from "react-native-maps";
 import * as Location from "expo-location";
-import uuid from "uuid";
 
 import { firebaseApp } from "../../utils/FireBase";
 import firebase from "firebase/app";
@@ -42,12 +42,57 @@ export default function AddRestaurantForm(props) {
       );
     } else {
       setIsLoading(true);
-      uploadImageStorage(imagesSelected);
+      uploadImageStorage(imagesSelected).then(arrayImages => {
+        db.collection("restaurants")
+          .add({
+            name: restaurantName,
+            address: restaurantAddress,
+            description: restaurantDescription,
+            location: locationRestaurant,
+            images: arrayImages, //firebase es una NO relacional, por lo cual se pueden guardar arrays y objetos
+            rating: 0,
+            ratingTotal: 0,
+            quantityVoting: 0,
+            createdAt: new Date(),
+            createdBy: firebaseApp.auth().currentUser.uid
+          })
+          .then(() => {
+            setIsLoading(false);
+            navigation.navigate("Restaurants");
+          })
+          .catch(() => {
+            setIsLoading(false);
+            toastRef.current.show(
+              "Error al subir el restaurante, intentarlo más tarde",
+              10000
+            );
+          });
+      });
     }
   };
 
+  function uuidGenerator() {
+    let S4 = function() {
+      return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    };
+    return (
+      S4() +
+      S4() +
+      "-" +
+      S4() +
+      "-" +
+      S4() +
+      "-" +
+      S4() +
+      "-" +
+      S4() +
+      S4() +
+      S4()
+    );
+  }
+
   const uploadImageStorage = async imageArray => {
-    const imageBlob = [];
+    const imagesBlob = [];
     await Promise.all(
       imageArray.map(async image => {
         const response = await fetch(image);
@@ -55,13 +100,13 @@ export default function AddRestaurantForm(props) {
         const ref = firebase
           .storage()
           .ref("restaurant-images")
-          .child(uuid());
+          .child(uuidGenerator());
         await ref.put(blob).then(result => {
-          //imageBlob.push(result.log)
-          console.log(result);
+          imagesBlob.push(result.metadata.name);
         });
       })
     );
+    return imagesBlob;
   };
 
   return (
